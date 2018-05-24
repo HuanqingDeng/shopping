@@ -13,7 +13,7 @@
                 <text class="cart-pro-price">
                     ￥{{item.price}}
                 </text>
-                <view class="cart-count-box">
+                <view class="cart-count-box" >
                     <text class="cart-count-down" bindtap="minusCount" data-index="{{index}}">-</text>
                     <text class="cart-count-num">{{item.num}}</text>
                     <text class="cart-count-add" bindtap="addCount" data-index="{{index}}">+</text>

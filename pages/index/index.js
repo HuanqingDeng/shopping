@@ -1,54 +1,89 @@
 //index.js
 //获取应用实例
+import goods from '../../api/goods.js'
 const app = getApp()
 
 Page({
   data: {
-    motto: 'Hello World',
-    userInfo: {},
-    hasUserInfo: false,
-    canIUse: wx.canIUse('button.open-type.getUserInfo')
+    num: 1,
+    show: false,
+    totalNum: 0,
+    scaleCart: false,
+    goods: null,
+    mess:goods[1].detail,
+    click:false,
+    click1:false,
+    click2:false,
+   
   },
-  //事件处理函数
-  bindViewTap: function() {
-    wx.navigateTo({
-      url: '../logs/logs'
+  onLoad(options) {
+    const id = options.id || 2;
+    let curGoods;
+    for (let i = 0; i < goods.length; i++) {
+      if (goods[i].id === id) {
+        curGoods = goods[i];
+        break;
+      }   
+    }
+    
+    setTimeout(() => {
+      this.setData({
+        goods: curGoods,
+      });
+    }, 1000)
+  },
+
+  addCount() {
+    let num = ++this.data.num;
+    // num++
+    this.setData({
+      num
     })
   },
-  onLoad: function () {
-    if (app.globalData.userInfo) {
+  addToCart() {
+    const num = this.data.num;
+    const total = this.data.totalNum;
+    this.setData({
+      show: true
+    });
+    setTimeout(() => {
       this.setData({
-        userInfo: app.globalData.userInfo,
-        hasUserInfo: true
-      })
-    } else if (this.data.canIUse){
-      // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
-      // 所以此处加入 callback 以防止这种情况
-      app.userInfoReadyCallback = res => {
+        show: false,
+        scaleCart: true
+      });
+      setTimeout(() => {
         this.setData({
-          userInfo: res.userInfo,
-          hasUserInfo: true
+          scaleCart: false,
+          hasCarts: true,
+          totalNum: num + total
         })
-      }
-    } else {
-      // 在没有 open-type=getUserInfo 版本的兼容处理
-      wx.getUserInfo({
-        success: res => {
-          app.globalData.userInfo = res.userInfo
-          this.setData({
-            userInfo: res.userInfo,
-            hasUserInfo: true
-          })
-        }
+      }, 200)
+    }, 300)
+  },
+  tap:function(e){
+    let index=e.currentTarget.dataset.index;
+    if(index==0){
+      this.setData({
+        mess:goods[0].detail,
+        click:false,
+        click1:false,
+        click2:false
       })
     }
-  },
-  getUserInfo: function(e) {
-    console.log(e)
-    app.globalData.userInfo = e.detail.userInfo
-    this.setData({
-      userInfo: e.detail.userInfo,
-      hasUserInfo: true
-    })
+    if(index==1){
+      this.setData({
+        mess:goods[0].parameter,
+        click1:true,
+        click:true,
+        click2:false
+      })
+    }if(index==2){
+      this.setData({
+        mess:goods[0].service,
+        click2:true,
+        click1:false,
+        click:true
+      })
+    }
   }
 })
